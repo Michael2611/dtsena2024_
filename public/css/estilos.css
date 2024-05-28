@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('login.css');
+@import url('sidebar.css');
+
+:root{
+    --bs-color:#EEEEEE;
+}
+
+body{
+    background-color: var(--bs-color) !important;
+    /*font-family: "Roboto", sans-serif !important;*/
+    font-family: "Reddit Sans", sans-serif !important;
+}
+
+.form-label{
+    font-size: 15px !important;
+}
+
+.btn-primary{
+    background-color: #39A900 !important;
+    border: 1px solid #39A900 !important;
+}
+
+.btn-primary:hover{
+    background-color: #308d01 !important;
+    border: 1px solid #308d01 !important;
+}
+
+.nav-link{
+    color: #308d01 !important;
+}
+
+
