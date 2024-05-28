@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="d-flex" style="width: calc(100% - 250px); height: 100vh;margin-left: 250px">
+    <div class="d-flex content-f">
         @extends('panel.sidebar.sidebar')
         <div class="container p-3 mt-2">
             <h1 class="fw-bold">{{ $canal->nombre_canal }}</h1>

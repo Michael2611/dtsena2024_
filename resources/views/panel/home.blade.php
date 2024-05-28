@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
-    <div class="d-flex" style="width: calc(100% - 250px); height: 100vh;margin-left: 250px">
+    <div class="d-flex content-f">
         @extends('panel.sidebar.sidebar')
-        <div class="container p-3">
+        <div class="container p-3" style="margin-left: 400px;">
             <div class="row">
                 <div class="col-md-8">
-                    <section class="canales-publicos mt-4">
+                    <section class="canales-publicos mt-5">
                         <div class="d-flex gap-2 align-items-center">
                             <h3>Canales públicos</h3>
                             @if (Auth::check())
@@ -16,7 +16,7 @@
                         <div class="row">
                             @foreach ($canales as $item)
                                 <div class="col-md-6">
-                                    <div class="card mt-2">
+                                    <div class="card mt-2 border-0">
                                         <div class="card-body">
                                             <h5>{{$item->nombre_canal}}</h5>
                                             <p>Total de dispositivos</p>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-md-4">
                     <section class="info mt-5">
-                        <div class="card card-body">
+                        <div class="card card-body border-0">
                             <h3 class="fw-bold">Sobre DTSENA</h3>
                             <p>DTSENA es una plataforma diseñada específicamente para la recolección de datos del cultivo de pepino poinsset, en el marco del proyecto SENNOVA 2023 titulado "Implementación de un sistema de fertirriego automatizado para un cultivo de hortalizas". Esta plataforma posibilita la recopilación de datos tanto a través de un canal DTSENA desde un dispositivo como desde el entorno web.</p>
                             <img class="img-fluid" src="{{asset('img/logo_sennova.png')}}" alt="">

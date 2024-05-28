@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="content">
+    <div class="content" style="width: 99%;margin-left:0px">
         <div class="row">
             <div class="col-md-8">
                 <div class="content-izq">
@@ -11,7 +11,7 @@
                 <div class="contenido-login">
                     <div class="form">
                         <h1 class="fw-bold">DTSENA</h1>
-                        <div class="card border-0 shadow">
+                        <div class="card border-0">
                             <div class="card-body">
                                 <form action="/login" method="post">
                                     @csrf
@@ -28,7 +28,7 @@
                                     </div>
                                     <div class="d-flex flex-column align-items-center justify-content-end gap-2">
                                         <a href="">Recuperar contraseña</a>
-                                        <a href="">Nuevo usuario</a>
+                                        <a href="/registro">Nuevo usuario</a>
                                     </div>
                                 </form>
                             </div>

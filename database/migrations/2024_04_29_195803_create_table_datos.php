@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('datos', function (Blueprint $table) {
             $table->id();
             $table->integer('id_dispositivo');
+            $table->string('nombre_conexion');
             $table->double('valor');
             $table->timestamps();
         });
