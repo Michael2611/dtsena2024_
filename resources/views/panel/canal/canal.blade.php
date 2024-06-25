@@ -9,6 +9,27 @@
                 <li>Tipo: {{ $canal->tipo }}</li>
                 <li>Fecha de creación: {{ $canal->created_at }}</li>
             </ul>
+            <h3 class="fw-bold">Dashboard</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h6>TEMPERATURA</h6>
+                            <p class="text-muted">Promedio</p>
+                            <h1>30 °C</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h6>HUMEDAD DE SUELO</h6>
+                            <p class="text-muted">Promedio</p>
+                            <h1>50 %</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="mt-4">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -58,9 +79,10 @@
                         <div class="row">
                             @foreach ($dispositivos as $dispositivo)
                                 <div class="col-md-6 mt-2 mb-2">
-                                    <div class="card">
-                                        <div class="card-header">{{ $dispositivo->dispositivo }}</div>
+                                    <div class="card border-0 shadow-sm">
                                         <div class="card-body">
+                                            <h5 class="fw-bold">{{ $dispositivo->dispositivo }}</h5>
+                                            <hr>
                                             <div style="width: 100%; margin: auto;">
                                                 <canvas id="barChart{{ $dispositivo->id }}"></canvas>
                                             </div>
@@ -107,13 +129,15 @@
                     </div>
                     @if (Auth::check())
                         @if (Auth::user()->id == $canal->id_user)
+                            <!--Seccion agregar nuevos dispositivos-->
                             <div class="tab-pane fade {{ $dis != null ? 'show active' : '' }}" id="dispositivo-tab-pane"
                                 role="tabpanel" aria-labelledby="dispositivo-tab" tabindex="0">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="card mt-2">
-                                            <div class="card-header">Agregar nuevo dispositivo</div>
+                                        <div class="card mt-2 shadow-sm border-0">
                                             <div class="card-body">
+                                                <h4 class="fw-bold">Agregar nuevo dispositivo</h4>
+                                                <hr>
                                                 @if ($dis != '' || $dis != null)
                                                     <form class="row g-3"
                                                         action="/panel/mis-canales/actualizar-dispositivo/{{ $dis->id }}/{{ $canal->id }}"
@@ -252,7 +276,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="card mt-2">
+                                        <div class="card mt-2 border-0 shadow-sm">
                                             <div class="card-header">Dispositivos</div>
                                             <div class="card-body">
                                                 @foreach ($dispositivos as $item)
@@ -275,17 +299,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--Fin de seccion-->
                             <div class="tab-pane fade show {{ $dis == null ? 'show active' : '' }}" id="profile-tab-pane"
                                 role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                 <div class="p-1">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="card mt-2">
-                                                <div class="card-header">Configuración canal</div>
+                                            <div class="card mt-2 border-0 shadow-sm">
                                                 <form action="/actualizar-canal/{{ $canal->id }}" method="post">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="card-body">
+                                                        <h4 class="fw-bold">Configuración canal</h4>
+                                                        <hr>
                                                         <div class="mb-3 row">
                                                             <label for="staticEmail" class="col-sm-3 col-form-label">ID
                                                                 Canal</label>

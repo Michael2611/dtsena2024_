@@ -16,16 +16,13 @@
                         <div class="row">
                             @foreach ($canales as $item)
                                 <div class="col-md-6">
-                                    <div class="card mt-2">
+                                    <a class="card border-0 mt-4 shadow-sm" href="/panel/mis-canales/canal/{{$item->id}}" style="background-color: #fff; text-decoration:none">
                                         <div class="card-body">
-                                            <h5>{{$item->nombre_canal}}</h5>
+                                            <h4>{{$item->nombre_canal}}</h4>
                                             <p>Total de dispositivos</p>
                                             <p>{{$item->lugar}}</p>
                                         </div>
-                                        <div class="card-footer">
-                                            <a href="/panel/mis-canales/canal/{{$item->id}}">Ver canal</a>
-                                        </div>
-                                    </div>
+                                    </a>
                                 </div>
                             @endforeach
                         </div>
@@ -33,7 +30,7 @@
                 </div>
                 <div class="col-md-4">
                     <section class="info mt-5">
-                        <div class="card card-body">
+                        <div class="card card-body border-0">
                             <h3 class="fw-bold">Sobre DTSENA</h3>
                             <p>DTSENA es una plataforma diseñada específicamente para la recolección de datos del cultivo de pepino poinsset, en el marco del proyecto SENNOVA 2023 titulado "Implementación de un sistema de fertirriego automatizado para un cultivo de hortalizas". Esta plataforma posibilita la recopilación de datos tanto a través de un canal DTSENA desde un dispositivo como desde el entorno web.</p>
                             <img class="img-fluid" src="{{asset('img/logo_sennova.png')}}" alt="">

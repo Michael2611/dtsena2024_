@@ -4,8 +4,8 @@
         @extends('panel.sidebar.sidebar')
         <div class="container p-3 mt-2">
             <h1 class="fw-bold">Mis canales</h1>
-            <div class="card">
-                <div class="card-body p-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>

@@ -1,7 +1,7 @@
 <div class="sidebar">
     <div class="d-flex gap-2 align-items-center">
-        <img src="{{asset('img/logo_sena.png')}}" style="width: 60px; height: 60px;">
-        <h3 class="fw-bold mt-2" style="color: #fff">DTSENA</h3>
+        <img src="{{asset('img/logo_sena.png')}}" style="width: 50px; height: 50px;">
+        <h5 class="mt-3 fw-bold" style="color: #000">DTSENA</h5>
     </div>
     <a href="/panel"><i class="bi bi-house"></i> Home</a>
     @if(Auth::check())<a href="/panel/mis-canales/{{Auth::user()->id}}"><i class="bi bi-database-up"></i> Mis Canales</a>@endif

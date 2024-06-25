@@ -1,37 +1,40 @@
 .sidebar{
-    width: 250px;
-    min-height: 100vh;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    justify-content: start;
-    padding-top: 40px;
-    padding-left: 30px;
-    align-items: start;
-    gap: 30px;
-    background-color: #00324D;
-    position: fixed;
-    top: 0;
+width: 250px;
+min-height: 100vh;
+height: 100%;
+display: flex;
+flex-direction: column;
+position: absolute;
+justify-content: start;
+padding-top: 40px;
+padding-left: 30px;
+align-items: start;
+gap: 30px;
+background-color: #fff;
+position: fixed;
+top: 0;
+-webkit-box-shadow: 1px 1px 12px 0px rgba(173,157,173,0.51);
+-moz-box-shadow: 1px 1px 12px 0px rgba(173,157,173,0.51);
+box-shadow: 1px 1px 12px 0px rgba(173,157,173,0.51);
 }
 
 .sidebar a{
-    text-decoration: none !important;
-    color: #fff;
-    font-size: 16px;
+text-decoration: none !important;
+color: #000;
+font-size: 16px;
 }
 
 .sidebar button{
-    color: #fff !important;
-    border: none; outline: none; background-color: transparent;
-    font-size: 16px !important;
-    font-weight: 600;
+color: #000 !important;
+border: none; outline: none; background-color: transparent;
+font-size: 16px !important;
+font-weight: 600;
 }
 
 .sidebar a:hover{
-    color: #39A900;
+color: #39A900;
 }
 
 .sidebar button:hover{
-    color: #39A900 !important;
+color: #39A900 !important;
 }
