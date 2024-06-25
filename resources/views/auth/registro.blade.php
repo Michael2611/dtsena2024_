@@ -3,12 +3,12 @@
     <div class="contenido-login">
         <div class="form">
             <h1>Registro DTSENA</h1>
-            <div class="card border-0">
+            <div class="card border-0" style="width: 30%;margin:auto">
                 <div class="card-body">
                     @if ($errors->any())
                         <ul>
                             @foreach ($errors as $error)
-                                <li>{{$error}}</li>
+                                <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     @endif
@@ -26,18 +26,25 @@
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo electronico</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="name@sena.edu.co">
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="name@sena.edu.co">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña</label>
                             <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Autorizo el tratamiento de mis datos personales.
+                            </label>
                         </div>
                         <div class="d-flex mb-3">
                             <button class="btn btn-primary w-100" type="submit">Registrar</button>
                         </div>
                         <div class="d-flex flex-column align-items-center justify-content-end gap-2">
                             <a href="">Recuperar contraseña</a>
-                            <a href="">Nuevo usuario</a>
+                            <a href="/login">Inicio de sesión</a>
                         </div>
                     </form>
                 </div>

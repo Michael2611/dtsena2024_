@@ -20,8 +20,13 @@ return new class extends Migration
             $table->string('estado');
             $table->string('tipo_grafico');
             $table->string('label_grafico');
+<<<<<<< HEAD
             $table->string('min_grafico');
             $table->string('max_grafico');
+=======
+            $table->integer('min_grafico');
+            $table->integer('max_grafico');
+>>>>>>> e01d2527c679ca4b9d29dc86abe33ecad9936a60
             $table->integer('id_canal');
             $table->timestamps();
         });

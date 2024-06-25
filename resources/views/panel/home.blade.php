@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
-    <div class="d-flex" style="width: calc(100% - 250px); height: 100vh;margin-left: 250px">
+    <div class="d-flex content-f">
         @extends('panel.sidebar.sidebar')
-        <div class="container p-3">
+        <div class="container p-3" style="margin-left: 400px;">
             <div class="row">
                 <div class="col-md-8">
-                    <section class="canales-publicos mt-4">
+                    <section class="canales-publicos mt-5">
                         <div class="d-flex gap-2 align-items-center">
                             <h3>Canales públicos</h3>
                             @if (Auth::check())
@@ -16,7 +16,11 @@
                         <div class="row">
                             @foreach ($canales as $item)
                                 <div class="col-md-6">
+<<<<<<< HEAD
                                     <a class="card border-0 mt-4 shadow-sm" href="/panel/mis-canales/canal/{{$item->id}}" style="background-color: #fff; text-decoration:none">
+=======
+                                    <div class="card mt-2 border-0">
+>>>>>>> e01d2527c679ca4b9d29dc86abe33ecad9936a60
                                         <div class="card-body">
                                             <h4>{{$item->nombre_canal}}</h4>
                                             <p>Total de dispositivos</p>
