@@ -1,26 +1,42 @@
-<<<<<<< HEAD
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-=======
 
->>>>>>> e01d2527c679ca4b9d29dc86abe33ecad9936a60
 @import url('login.css');
 @import url('sidebar.css');
 
 :root{
-    --bs-color:#EEEEEE;
+    --bs-color:#FFF;
+}
+
+/*EEEEEE*/
+
+ul{
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+}
+
+li{
+    list-style: none;
+    padding-left: 0px;
+    margin-left: 0px;
 }
 
 body{
     background-color: var(--bs-color) !important;
     /*font-family: "Roboto", sans-serif !important;*/
-<<<<<<< HEAD
     /*font-family: "Reddit Sans", sans-serif !important;*/
     /*font-family: "Roboto", Helvetica, Arial, sans-serif !important;*/
     font-family: "Rubik", sans-serif !important;
-=======
     font-family: "Instrument Sans", sans-serif !important;
->>>>>>> e01d2527c679ca4b9d29dc86abe33ecad9936a60
+}
+
+.bg-primario{
+    background-color: #308d01 !important;
+}
+
+.text-primario{
+    color: #308d01;
 }
 
 .form-label{
@@ -42,15 +58,27 @@ body{
 }
 
 .content{
-    width: calc(100% - 250px); 
+    width: calc(100% - 250px);
     height: 100vh;
     margin-left: 250px
 }
 
+.content-f{
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.description{
+    padding-top: 20px;
+    border-top: 1px solid #efefef;
+}
 
 @media only screen and (max-width: 600px) {
     .content-f{
         width: 100% !important;
+        margin-left: 0px !important;
+    }
+    .container-fluid{
         margin-left: 0px !important;
     }
 }

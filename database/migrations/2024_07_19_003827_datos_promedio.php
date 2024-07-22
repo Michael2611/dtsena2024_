@@ -13,16 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dispositivos', function (Blueprint $table) {
+        Schema::create('datos_promedio', function (Blueprint $table) {
             $table->id();
-            $table->string('dispositivo');
             $table->string('nombre_conexion');
-            $table->string('estado');
-            $table->string('tipo_grafico');
-            $table->string('label_grafico');
-            $table->string('min_grafico');
-            $table->string('max_grafico');
-            $table->integer('id_canal');
+            $table->double('valor');
             $table->timestamps();
         });
     }
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_devices');
+        //
     }
 };

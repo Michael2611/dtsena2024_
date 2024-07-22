@@ -16,4 +16,8 @@ class Dispositivos extends Model
         return $this->hasMany(Datos::class, 'nombre_conexion','nombre_conexion');
     }
 
+    public function datosPromedio(){
+        return $this->hasMany(DatosPromedio::class, 'nombre_conexion', 'nombre_conexion');
+    }
+
 }

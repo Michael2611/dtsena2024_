@@ -2,33 +2,30 @@
 @section('content')
     <div class="d-flex content-f">
         @extends('panel.sidebar.sidebar')
-        <div class="container p-3 mt-2">
-            <h1 class="fw-bold">{{ $canal->nombre_canal }}</h1>
+        <div class="container p-2">
+            <h1 class="fw-bold display-6">{{ $canal->nombre_canal }}</h1>
             <ul>
                 <li>Lugar: {{ $canal->lugar }}</li>
                 <li>Tipo: {{ $canal->tipo }}</li>
                 <li>Fecha de creación: {{ $canal->created_at }}</li>
             </ul>
-            <h3 class="fw-bold">Dashboard</h3>
+            <p>Descripción del canal: {{ $canal->descripcion }}</p>
+            <hr>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <h6>TEMPERATURA</h6>
-                            <p class="text-muted">Promedio</p>
-                            <h1>30 °C</h1>
+                @foreach ($datosPromedio as $item)
+                    <div class="col-md-4">
+                        <div class="card card-body d-flex justify-content-between align-items-center bg-white rounded-0">
+                            <div class="content-1">
+                                <h4 class="fw-bold">{{ $item->dispositivo->dispositivo }}</h4>
+                                <p class="text-muted">Valor</p>
+                            </div>
+                            <div class="content-2">
+                                <h1 class="text-primario fw-bold">
+                                    {{ $item->valor . ' ' . $item->dispositivo->label_grafico }}</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <h6>HUMEDAD DE SUELO</h6>
-                            <p class="text-muted">Promedio</p>
-                            <h1>50 %</h1>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
             <div class="mt-4">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -41,15 +38,15 @@
                     @if (Auth::check())
                         @if (Auth::user()->id == $canal->id_user)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link  {{ $dis != null ? 'active' : '' }}" id="dispositivo-tab"
-                                    data-bs-toggle="tab" data-bs-target="#dispositivo-tab-pane" type="button"
-                                    role="tab" aria-controls="dispositivo-tab-pane" aria-selected="true">Agregar
-                                    dispositivos</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
                                 <button class="nav-link {{ $dis == null ? 'active' : '' }}" id="profile-tab"
                                     data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab"
                                     aria-controls="profile-tab-pane" aria-selected="false">Configuración canal</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link  {{ $dis != null ? 'active' : '' }}" id="dispositivo-tab"
+                                    data-bs-toggle="tab" data-bs-target="#dispositivo-tab-pane" type="button"
+                                    role="tab" aria-controls="dispositivo-tab-pane"
+                                    aria-selected="true">Dispositivos</button>
                             </li>
                         @endif
                     @endif
@@ -74,15 +71,17 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
+                    <!--Vista pública-->
                     <div class="tab-pane fade {{ !Auth::check() ? 'show active' : '' }}" id="home-tab-pane" role="tabpanel"
                         aria-labelledby="home-tab" tabindex="0">
-                        <div class="row">
+                        <div class="row mt-2">
                             @foreach ($dispositivos as $dispositivo)
                                 <div class="col-md-6 mt-2 mb-2">
-                                    <div class="card border-0 shadow-sm">
+                                    <div class="card shadow-sm rounded-0">
+                                        <div class="card-header bg-primario text-white rounded-0">
+                                            {{ $dispositivo->dispositivo }}
+                                        </div>
                                         <div class="card-body">
-                                            <h5 class="fw-bold">{{ $dispositivo->dispositivo }}</h5>
-                                            <hr>
                                             <div style="width: 100%; margin: auto;">
                                                 <canvas id="barChart{{ $dispositivo->id }}"></canvas>
                                             </div>
@@ -90,54 +89,76 @@
                                     </div>
                                 </div>
                                 <script>
-                                    // Arrays para almacenar datos de fecha y valor
-                                    var fechas{{ $dispositivo->id }} = [];
-                                    var valores{{ $dispositivo->id }} = [];
-
-                                    // Bucle para obtener datos del dispositivo y sus datos asociados
-                                    @foreach ($dispositivo->datos as $dato)
-                                        fechas{{ $dispositivo->id }}.push("{{ date('H:i:s', strtotime($dato->created_at)) }}");
-                                        valores{{ $dispositivo->id }}.push({{ $dato->valor }});
-                                    @endforeach
-
-                                    // Crear la gráfica con los datos obtenidos
+                                    // Crear la gráfica inicialmente
                                     var ctx{{ $dispositivo->id }} = document.getElementById('barChart{{ $dispositivo->id }}').getContext('2d');
                                     var myChart{{ $dispositivo->id }} = new Chart(ctx{{ $dispositivo->id }}, {
                                         type: '{{ $dispositivo->tipo_grafico }}',
                                         data: {
-                                            labels: fechas{{ $dispositivo->id }},
+                                            labels: [],
                                             datasets: [{
                                                 label: '{{ $dispositivo->label_grafico }}',
-                                                data: valores{{ $dispositivo->id }},
+                                                data: [],
                                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                                 borderColor: 'rgba(75, 192, 192, 1)',
-                                                borderWidth: 1
+                                                borderWidth: 2
                                             }]
                                         },
                                         options: {
                                             scales: {
                                                 y: {
-                                                    min: {{$dispositivo->min_grafico}},
-                                                    max: {{$dispositivo->max_grafico}},
+                                                    min: {{ $dispositivo->min_grafico }},
+                                                    max: {{ $dispositivo->max_grafico }},
                                                 }
                                             }
                                         }
                                     });
+
+                                    function updateChart{{ $dispositivo->id }}(data) {
+                                        myChart{{ $dispositivo->id }}.data.labels = data.fechas;
+                                        myChart{{ $dispositivo->id }}.data.datasets[0].data = data.valores;
+                                        myChart{{ $dispositivo->id }}.update();
+                                    }
+
+                                    function fetchData{{ $dispositivo->id }}() {
+                                        $.ajax({
+                                            url: '{{ route('canal.datos', ['id' => $dispositivo->id_canal]) }}',
+                                            method: 'GET',
+                                            success: function(response) {
+                                                var fechas = [];
+                                                var valores = [];
+                                                response.forEach(function(dispositivo) {
+                                                    if (dispositivo.id === {{ $dispositivo->id }}) {
+                                                        dispositivo.datos.forEach(function(dato) {
+                                                            fechas.push(new Date(dato.created_at).toLocaleTimeString());
+                                                            valores.push(dato.valor);
+                                                        });
+                                                    }
+                                                });
+                                                updateChart{{ $dispositivo->id }}({
+                                                    fechas: fechas,
+                                                    valores: valores
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    setInterval(fetchData{{ $dispositivo->id }}, 5000); // Actualizar cada 5 segundos
                                 </script>
                             @endforeach
+
                         </div>
                     </div>
+                    <!--Fin de sección-->
                     @if (Auth::check())
                         @if (Auth::user()->id == $canal->id_user)
                             <!--Seccion agregar nuevos dispositivos-->
                             <div class="tab-pane fade {{ $dis != null ? 'show active' : '' }}" id="dispositivo-tab-pane"
                                 role="tabpanel" aria-labelledby="dispositivo-tab" tabindex="0">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="card mt-2 shadow-sm border-0">
-                                            <div class="card-body">
-                                                <h4 class="fw-bold">Agregar nuevo dispositivo</h4>
-                                                <hr>
+                                    <div class="col-md-7">
+                                        <div class="card mt-2 rounded-0">
+                                            <div class="card-header bg-primario text-white rounded-0">Dispositivos</div>
+                                            <div class="card-body bg-white">
                                                 @if ($dis != '' || $dis != null)
                                                     <form class="row g-3"
                                                         action="/panel/mis-canales/actualizar-dispositivo/{{ $dis->id }}/{{ $canal->id }}"
@@ -149,7 +170,7 @@
                                                                 dispositivo</label>
                                                             <input type="text" class="form-control" id="dispositivo"
                                                                 name="dispositivo" value="{{ $dis->dispositivo }}"
-                                                                placeholder="Ingrese nombre dispositivo">
+                                                                placeholder="Ingrese nombre dispositivo" required>
                                                         </div>
                                                         <div class="mb-0">
                                                             <label for="estado" class="form-label">Estado</label>
@@ -191,16 +212,18 @@
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-md-6">
-                                                                <label for="label_grafico" class="form-label">Minímo valor</label>
-                                                                <input type="number" class="form-control" id="min_grafico"
-                                                                    name="min_grafico"
-                                                                    value="{{$dis->min_grafico}}">
+                                                                <label for="label_grafico" class="form-label">Minímo
+                                                                    valor</label>
+                                                                <input type="number" class="form-control"
+                                                                    id="min_grafico" name="min_grafico"
+                                                                    value="{{ $dis->min_grafico }}">
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label for="label_grafico" class="form-label">Máximo valor</label>
-                                                                <input type="number" class="form-control" id="max_grafico"
-                                                                    name="max_grafico"
-                                                                    value="{{$dis->max_grafico}}">
+                                                                <label for="label_grafico" class="form-label">Máximo
+                                                                    valor</label>
+                                                                <input type="number" class="form-control"
+                                                                    id="max_grafico" name="max_grafico"
+                                                                    value="{{ $dis->max_grafico }}">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" readonly name="id_canal" id="id_canal"
@@ -221,7 +244,7 @@
                                                                 dispositivo</label>
                                                             <input type="text" class="form-control" id="dispositivo"
                                                                 name="dispositivo"
-                                                                placeholder="Ingrese nombre dispositivo">
+                                                                placeholder="Ingrese nombre dispositivo" required>
                                                         </div>
                                                         <div class="mb-0">
                                                             <label for="estado" class="form-label">Estado</label>
@@ -252,15 +275,17 @@
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-md-6">
-                                                                <label for="label_grafico" class="form-label">Minímo valor</label>
-                                                                <input type="number" class="form-control" id="min_grafico"
-                                                                    name="min_grafico"
+                                                                <label for="label_grafico" class="form-label">Minímo
+                                                                    valor</label>
+                                                                <input type="number" class="form-control"
+                                                                    id="min_grafico" name="min_grafico"
                                                                     placeholder="Ingrese nombre de la etiqueta label">
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label for="label_grafico" class="form-label">Máximo valor</label>
-                                                                <input type="number" class="form-control" id="max_grafico"
-                                                                    name="max_grafico"
+                                                                <label for="label_grafico" class="form-label">Máximo
+                                                                    valor</label>
+                                                                <input type="number" class="form-control"
+                                                                    id="max_grafico" name="max_grafico"
                                                                     placeholder="Ingrese nombre de la etiqueta label">
                                                             </div>
                                                         </div>
@@ -275,43 +300,61 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="card mt-2 border-0 shadow-sm">
-                                            <div class="card-header">Dispositivos</div>
-                                            <div class="card-body">
-                                                @foreach ($dispositivos as $item)
-                                                    <div class="d-flex gap-2 align-items-center">
-                                                        <input type="text" readonly class="form-control"
-                                                            id="nombre_canal" value="{{ $item->dispositivo }}">
-                                                        <a
-                                                            href="/panel/mis-canales/canal/{{ $canal->id }}/dispositivo/{{ $item->id }}">Editar</a>
-                                                        <form
-                                                            action="/panel/mis-canales/eliminar-dispositivo/{{ $item->id }}"
-                                                            method="post">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button class="btn btn-danger mt-3">Eliminar</button>
-                                                        </form>
-                                                    </div>
-                                                @endforeach
+                                    <div class="col-md-5">
+                                        <div class="card mt-2 rounded-0">
+                                            <div class="card-header rounded-0 bg-primario text-white">Dispositivos
+                                                registrados</div>
+                                            <div class="card-body bg-white">
+                                                <table class="table bg-white">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nombre dispositivio</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($dispositivos as $item)
+                                                            <tr>
+                                                                <td>
+                                                                    {{ $item->dispositivo }}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex gap-2 align-items-center">
+                                                                        <a class="btn btn-info btn-sm"
+                                                                            href="/panel/mis-canales/canal/{{ $canal->id }}/dispositivo/{{ $item->id }}">Editar</a>
+                                                                        <form
+                                                                            action="/panel/mis-canales/eliminar-dispositivo/{{ $item->id }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button
+                                                                                class="btn btn-danger btn-sm mt-3">Eliminar</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!--Fin de seccion-->
+                            <!--Sección configuración de canal -->
                             <div class="tab-pane fade show {{ $dis == null ? 'show active' : '' }}" id="profile-tab-pane"
                                 role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                 <div class="p-1">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="card mt-2 border-0 shadow-sm">
+                                        <div class="col-md-12">
+                                            <div class="card mt-2 rounded-0 border-0">
+                                                <div class="card-header bg-primario text-white rounded-0">Configuración
+                                                    canal</div>
                                                 <form action="/actualizar-canal/{{ $canal->id }}" method="post">
                                                     @csrf
                                                     @method('PUT')
-                                                    <div class="card-body">
-                                                        <h4 class="fw-bold">Configuración canal</h4>
-                                                        <hr>
+                                                    <div class="card-body bg-white">
                                                         <div class="mb-3 row">
                                                             <label for="staticEmail" class="col-sm-3 col-form-label">ID
                                                                 Canal</label>
@@ -355,33 +398,48 @@
                                                                     name="lugar" value="{{ $canal->lugar }}">
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <button class="btn btn-primary">Guardar</button>
+                                                        <div class="mb-3 row">
+                                                            <label for="lugar" class="col-sm-3 col-form-label">Tasa de
+                                                                refresco</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control"
+                                                                    id="tasa_de_refresco" name="tasa_de_refresco"
+                                                                    value="{{ $canal->tasa_de_refresco }}">
+                                                                <span class="text-muted fw-bold"><small>Tiempo de recarga
+                                                                        en segundos (s).</small></span>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-primary mb-3">Guardar cambios</button>
+                                                        <hr>
+                                                        <?php $i = 1; ?>
+                                                        @foreach ($dispositivos as $item)
+                                                            <div class="mb-1 row">
+                                                                <div class="col-sm-2"><label for="">Dispositivo
+                                                                        {{ $i++ }}</label></div>
+                                                                <div class="col-sm-5">
+                                                                    <input type="text" readonly class="form-control"
+                                                                        id="nombre_canal"
+                                                                        value="{{ $item->dispositivo }}">
+                                                                </div>
+                                                                <div class="col-sm-5">
+                                                                    <input type="text" readonly class="form-control"
+                                                                        id="nombre_canal"
+                                                                        value="{{ $item->nombre_conexion }}">
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="card mt-2">
-                                                <div class="card-header">Dispositivos</div>
-                                                <div class="card-body">
-                                                    @foreach ($dispositivos as $item)
-                                                        <div class="mb-3 row">
-                                                            <div class="col-sm-7">
-                                                                <input type="text" readonly class="form-control"
-                                                                    id="nombre_canal" value="{{ $item->dispositivo }}">
-                                                            </div>
-                                                            <label for="descripcion"
-                                                                class="col-sm-2 col-form-label">{{ $item->estado == 1 ? 'Activo' : 'Inactivo' }}</label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
+                                        <div class="col-md-4">
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--Fin de sección-->
                         @endif
                     @endif
                     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab"
@@ -392,8 +450,8 @@
                                     <div class="card-header">Compartir canal</div>
                                     <div class="card-body">
                                         <div class="d-flex gap-2">
-                                            <input class="form-control" id="urlInput" type="text" value="{{ $url }}"
-                                                readonly>
+                                            <input class="form-control" id="urlInput" type="text"
+                                                value="{{ $url }}" readonly>
                                             <button class="btn btn-primary" onclick="copiarURL()">Compartir</button>
                                         </div>
                                     </div>
@@ -430,12 +488,12 @@
     </div>
 @endsection
 @section('footer')
-<script>
-    function copiarURL() {
-        var urlInput = document.getElementById("urlInput");
-        urlInput.select();
-        document.execCommand("copy");
-        alert("URL copiada al portapapeles: " + urlInput.value);
-    }
+    <script>
+        function copiarURL() {
+            var urlInput = document.getElementById("urlInput");
+            urlInput.select();
+            document.execCommand("copy");
+            alert("URL copiada al portapapeles: " + urlInput.value);
+        }
     </script>
 @endsection

@@ -10,7 +10,7 @@ padding-top: 40px;
 padding-left: 30px;
 align-items: start;
 gap: 30px;
-background-color: #fff;
+background-color: #39A900;
 position: fixed;
 top: 0;
 -webkit-box-shadow: 1px 1px 12px 0px rgba(173,157,173,0.51);
@@ -20,23 +20,23 @@ box-shadow: 1px 1px 12px 0px rgba(173,157,173,0.51);
 
 .sidebar a{
 text-decoration: none !important;
-color: #000;
+color: #fff;
 font-size: 16px;
 }
 
 .sidebar button{
-color: #000 !important;
+color: #fff !important;
 border: none; outline: none; background-color: transparent;
 font-size: 16px !important;
 font-weight: 600;
 }
 
 .sidebar a:hover{
-color: #39A900;
+color: #ebeaea;
 }
 
 .sidebar button:hover{
-color: #39A900 !important;
+color: #ebeaea !important;
 }
 
 @media only screen and (max-width: 600px) {

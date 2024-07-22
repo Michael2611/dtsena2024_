@@ -35,11 +35,15 @@ Route::get('/panel', function(){
     return view('panel.home');
 });
 
+Route::match(['get', 'post'], '/registro-valores', [CanalController::class, 'registroDatos']);
+
 Route::get('/panel', [homeController::class, 'canales']);
 Route::get('/panel/mis-canales/{id}', [canalController::class, 'mis_canales']);
 Route::get('/panel/mis-canales/canal/{id}', [canalController::class, 'canal']);
+Route::get('/panel/mis-canales/canal/{id}/datos', [canalController::class, 'getDatos'])->name('canal.datos');
 Route::get('/panel/mis-canales/canal/{id}/dispositivo/{idDispositivo}', [canalController::class, 'canal'])->where('idDispositivo', '[0-9]+');
 
+Route::get('/panel/mis-canales/canal/{id}/datospromedio', [canalController::class, 'getDatosPromedio'])->name('canal.datospromedio');
 
 Route::post('/registro-canal', [canalController::class, 'store']);
 Route::put('/actualizar-canal/{id}', [canalController::class, 'updateCanal']);
@@ -48,4 +52,11 @@ Route::post('/panel/mis-canales/registro-dispositivo', [canalController::class, 
 Route::put('/panel/mis-canales/actualizar-dispositivo/{id}/{icanal}', [canalController::class, 'updateDispositivo']);
 Route::delete('/panel/mis-canales/eliminar-dispositivo/{id}', [canalController::class, 'deleteDispositivo']);
 
+
+
+
+
 Route::get('/panel/canal/{id}', [canalController::class, 'edit']);
+
+
+
