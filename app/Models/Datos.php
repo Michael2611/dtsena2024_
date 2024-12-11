@@ -12,11 +12,23 @@ class Datos extends Model
     protected $table = "datos";
 
     protected $fillable = [
-        'id','nombre_conexion','valor','fecha_registro'
+        'id',
+        'campo1',
+        'campo2',
+        'campo3',
+        'campo4',
+        'campo5',
+        'campo6',
+        'campo7',
+        'campo8',
+        'campo9',
+        'campo10',
+        'd_id_canal',
+        'created_at'
     ];
 
     public function dispositivo(){
-        return $this->belongsTo(Dispositivos::class, 'nombre_conexion', 'id');
+        return $this->belongsTo(Dispositivos::class, 'id_canal', 'id');
     }
 
 }

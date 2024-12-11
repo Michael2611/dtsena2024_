@@ -10,7 +10,9 @@
             <div class="col-md-4">
                 <div class="contenido-login">
                     <div class="form">
-                        <h1 class="fw-bold">DTSENA</h1>
+                        <div class="img-logo" style="width: 200px; height: 200px;margin:auto">
+                            <img style="width: 100%; height: 100%;" src="{{asset('img/LOGO_DTSENA_SINFONDO_COPY.png')}}" alt="">
+                        </div>
                         <div class="card border-0">
                             <div class="card-body">
                                 <form action="/login" method="post">

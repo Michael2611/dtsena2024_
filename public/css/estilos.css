@@ -1,12 +1,15 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @import url('login.css');
 @import url('sidebar.css');
 
 :root{
     --bs-color:#FFF;
+}
+
+*{
+    margin: 0;
+    padding: 0;
 }
 
 /*EEEEEE*/
@@ -24,11 +27,11 @@ li{
 
 body{
     background-color: var(--bs-color) !important;
+    font-family: "Source Sans 3", sans-serif !important;
     /*font-family: "Roboto", sans-serif !important;*/
     /*font-family: "Reddit Sans", sans-serif !important;*/
     /*font-family: "Roboto", Helvetica, Arial, sans-serif !important;*/
-    font-family: "Rubik", sans-serif !important;
-    font-family: "Instrument Sans", sans-serif !important;
+
 }
 
 .bg-primario{
@@ -58,19 +61,27 @@ body{
 }
 
 .content{
-    width: calc(100% - 250px);
+    width: calc(100% - 200px);
     height: 100vh;
-    margin-left: 250px
+    margin-left: 200px
 }
 
 .content-f{
-    margin-left: 250px;
+    margin-left: 200px;
     padding: 20px;
 }
 
 .description{
     padding-top: 20px;
     border-top: 1px solid #efefef;
+}
+
+.btn-header-admin{
+    color: #000 !important;
+    list-style: none;
+    text-decoration: none;
+    border: 1px solid #efefef;
+    padding: 10px 20px;
 }
 
 @media only screen and (max-width: 600px) {

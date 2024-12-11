@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\canalController;
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\SurcoPlantaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('/panel');
+    return redirect('/');
 });
 
 Route::get('/login', function(){return view('auth.login');});
@@ -27,23 +28,37 @@ Route::get('/registro', function(){return view('auth.registro');});
 Route::post('/registro', [AuthController::class, 'registro']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::get('/panel', function(){
+Route::get('/', function(){
     return view('panel.home');
 });
 
-Route::get('/panel', function(){
+Route::get('/', function(){
     return view('panel.home');
 });
 
 Route::match(['get', 'post'], '/registro-valores', [CanalController::class, 'registroDatos']);
 
-Route::get('/panel', [homeController::class, 'canales']);
-Route::get('/panel/mis-canales/{id}', [canalController::class, 'mis_canales']);
-Route::get('/panel/mis-canales/canal/{id}', [canalController::class, 'canal']);
+Route::get('/', [homeController::class, 'canales']);
+Route::get('/mis-canales/{id}', [canalController::class, 'mis_canales']);
+Route::get('/mis-canales/canal/{id}', [canalController::class, 'canal']);
 Route::get('/panel/mis-canales/canal/{id}/datos', [canalController::class, 'getDatos'])->name('canal.datos');
-Route::get('/panel/mis-canales/canal/{id}/dispositivo/{idDispositivo}', [canalController::class, 'canal'])->where('idDispositivo', '[0-9]+');
+
+Route::get('/panel/mis-canales/canal/{id}/dispositivos/{idDispositivo}', [canalController::class, 'canal'])->where('idDispositivo', '[0-9]+');
 
 Route::get('/panel/mis-canales/canal/{id}/datospromedio', [canalController::class, 'getDatosPromedio'])->name('canal.datospromedio');
+
+
+//nuevas rutas
+Route::get('/canal/{id}/configuracion-canal', [canalController::class, 'configuracion_canal'])->name('configuracion_canal');
+Route::get('/canal/{id}/dispositivos', [canalController::class, 'vista_dispositivos'])->name('vista_dispositivo');
+Route::get('/canal/{id}/vista-publica', [canalController::class, 'vista_publica'])->name('vista_publica');
+Route::get('/canal/{id}/compartir', [canalController::class, 'compartir'])->name('compartir');
+Route::get('/canal/{id}/credenciales', [canalController::class, 'credenciales'])->name('credenciales');
+Route::get('/canal/{id}/distribucion-terreno', [canalController::class, 'distribucion_terreno'])->name('distribucion_terreno');
+
+
+Route::post('/generar-tabla-cultivo', [SurcoPlantaController::class, 'generarTablaCultivo'])->name('generar-tabla');
+Route::get('/generar-tabla-cultivo', [SurcoPlantaController::class, 'actualizarTablaCultivo'])->name('actualizar-tabla');
 
 Route::post('/registro-canal', [canalController::class, 'store']);
 Route::put('/actualizar-canal/{id}', [canalController::class, 'updateCanal']);
@@ -52,8 +67,8 @@ Route::post('/panel/mis-canales/registro-dispositivo', [canalController::class, 
 Route::put('/panel/mis-canales/actualizar-dispositivo/{id}/{icanal}', [canalController::class, 'updateDispositivo']);
 Route::delete('/panel/mis-canales/eliminar-dispositivo/{id}', [canalController::class, 'deleteDispositivo']);
 
-
-
+//Rutas de exportar datos
+Route::get('/exportar-datos-canal/{id}', [canalController::class, 'exportarExcelDatos']);
 
 
 Route::get('/panel/canal/{id}', [canalController::class, 'edit']);

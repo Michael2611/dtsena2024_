@@ -38,7 +38,7 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect('/panel');
+            return redirect('/');
         }
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

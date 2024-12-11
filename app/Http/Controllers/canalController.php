@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DatosExport;
 use App\Models\Canal;
 use App\Models\Datos;
 use App\Models\DatosPromedio;
 use App\Models\Dispositivos;
+use App\Models\SurcoPlanta;
 use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class canalController extends Controller
 {
@@ -47,14 +51,11 @@ class canalController extends Controller
         if ($idDispositivo != "" && $idDispositivo != null) {
             $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
             $datosPromedio = DatosPromedio::where('data_id_canal', $icanal)->with('dispositivo')->get();
-            return view('panel.canal.canal', compact('canal', 'dispositivos', 'url', 'dis', 'idDispositivo','datosPromedio'));
+            return view('vistas-canal.vista_publica', compact('canal', 'dispositivos', 'url', 'dis', 'idDispositivo', 'datosPromedio'));
         } else {
             $dis = null;
-
             $datosPromedio = DatosPromedio::where('data_id_canal', $icanal)->with('dispositivo')->get();
-
-
-            return view('panel.canal.canal', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
+            return view('vistas-canal.vista_publica', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
         }
     }
 
@@ -111,7 +112,7 @@ class canalController extends Controller
             if ($dispositivos->count() <= 10) {
                 $dispositivo = Dispositivos::create([
                     'dispositivo' => $request->dispositivo,
-                    'nombre_conexion' => $canal->token_conexion . "campo" . $dispositivos->count() + 1,
+                    'nombre_conexion' => "campo" . $dispositivos->count() + 1,
                     'estado' => $request->estado,
                     'tipo_grafico' => $request->tipo_grafico,
                     'label_grafico' => $request->label_grafico,
@@ -149,13 +150,47 @@ class canalController extends Controller
     public function registroDatos(Request $request)
     {
         $key = $request->input('key');
-        $campos = [];
-
-        for ($i = 1; $i <= 10; $i++) {
-            $campos["campo$i"] = $request->input($key . "campo$i");
-        }
+        $campos = $request->only(['campo1', 'campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo8', 'campo9', 'campo10']);
 
         $canal = Canal::where('token_conexion', $key)->first();
+
+        if ($canal) {
+            Datos::create([
+                'campo1' => $campos['campo1'] ?? null,
+                'campo2' => $campos['campo2'] ?? null,
+                'campo3' => $campos['campo3'] ?? null,
+                'campo4' => $campos['campo4'] ?? null,
+                'campo5' => $campos['campo5'] ?? null,
+                'campo6' => $campos['campo6'] ?? null,
+                'campo7' => $campos['campo7'] ?? null,
+                'campo8' => $campos['campo8'] ?? null,
+                'campo9' => $campos['campo9'] ?? null,
+                'campo10' => $campos['campo10'] ?? null,
+                'd_id_canal' => $canal->id
+            ]);
+
+            // Actualizar o crear registro en DatosPromedio
+            /*$consulta_datos_promedio_dispositivo = DB::table('datos_promedio')
+                ->where('nombre_conexion', $nombre_conexion)
+                ->first();
+
+            if ($consulta_datos_promedio_dispositivo) {
+                DB::table('datos_promedio')
+                    ->where('nombre_conexion', $nombre_conexion)
+                    ->update([
+                        'valor' => $valor
+                    ]);
+            } else {
+                DatosPromedio::create([
+                    'nombre_conexion' => $nombre_conexion,
+                    'valor' => $valor,
+                    'data_id_canal' => $canal->id
+                ]);
+            }*/
+        }
+
+
+        /*$canal = Canal::where('token_conexion', $key)->first();
 
         if ($canal) {
             foreach ($campos as $campo => $valor) {
@@ -188,17 +223,138 @@ class canalController extends Controller
                     }
                 }
             }
-        }
+        }*/
     }
 
-    public function getDatos($icanal){
+    public function getDatos($icanal)
+    {
         $dispositivos = Dispositivos::where('id_canal', $icanal)->with('datos')->get();
         return response()->json($dispositivos);
     }
 
-    public function getDatosPromedio($icanal){
+    public function getDatosPromedio($icanal)
+    {
         $datosPromedio = DatosPromedio::where('data_id_canal', $icanal)->with('dispositivo')->get();
         return response()->json($datosPromedio);
     }
 
+    public function exportarExcelDatos($id)
+    {
+        return Excel::download(new DatosExport($id), 'datos.xlsx');
+    }
+
+
+    //nuevas rutas
+    public function configuracion_canal($id, Request $request, $idDispositivo = null)
+    {
+        $canal = Canal::where(['id' => $id])->first();
+        $url = $request->url();
+        $dispositivos = Dispositivos::where('id_canal', $id)->get();
+
+        if ($idDispositivo != "" && $idDispositivo != null) {
+            $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.configuracion_canal', compact('canal', 'dispositivos', 'idDispositivo', 'datosPromedio'));
+        } else {
+            $dis = null;
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.configuracion_canal', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
+        }
+    }
+
+    public function vista_dispositivos($id, Request $request, $idDispositivo = null)
+    {
+        $canal = Canal::where(['id' => $id])->first();
+        $url = $request->url();
+        $dispositivos = Dispositivos::where('id_canal', $id)->get();
+
+        if ($idDispositivo != "" && $idDispositivo != null) {
+            $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.dispositivos', compact('canal', 'dispositivos', 'idDispositivo', 'datosPromedio'));
+        } else {
+            $dis = null;
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.dispositivos', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
+        }
+    }
+
+    public function vista_publica($id, Request $request, $idDispositivo = null)
+    {
+        $canal = Canal::where(['id' => $id])->first();
+        $url = $request->url();
+        $dispositivos = Dispositivos::where('id_canal', $id)->get();
+
+        if ($idDispositivo != "" && $idDispositivo != null) {
+            $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.vista_publica', compact('canal', 'dispositivos', 'idDispositivo', 'datosPromedio'));
+        } else {
+            $dis = null;
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.vista_publica', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
+        }
+    }
+
+    public function compartir($id, Request $request, $idDispositivo = null)
+    {
+        $canal = Canal::where(['id' => $id])->first();
+        $url = $request->url();
+        $dispositivos = Dispositivos::where('id_canal', $id)->get();
+
+        if ($idDispositivo != "" && $idDispositivo != null) {
+            $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.compartir', compact('canal', 'dispositivos', 'idDispositivo', 'datosPromedio'));
+        } else {
+            $dis = null;
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.compartir', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
+        }
+    }
+
+    public function credenciales($id, Request $request, $idDispositivo = null)
+    {
+        $canal = Canal::where(['id' => $id])->first();
+        $url = $request->url();
+        $dispositivos = Dispositivos::where('id_canal', $id)->get();
+
+        if ($idDispositivo != "" && $idDispositivo != null) {
+            $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.credenciales', compact('canal', 'dispositivos', 'idDispositivo', 'datosPromedio'));
+        } else {
+            $dis = null;
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.credenciales', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio'));
+        }
+    }
+
+    public function distribucion_terreno($id, Request $request, $idDispositivo = null)
+    {
+        $canal = Canal::where(['id' => $id])->first();
+        $url = $request->url();
+        $dispositivos = Dispositivos::where('id_canal', $id)->get();
+
+        $registro_canal = SurcoPlanta::where('canal', $id)->first();
+
+        $tabla = [];
+        if ($registro_canal) {
+            $tabla = json_decode($registro_canal->tabla, true);  // Decodificar el campo 'tabla' de JSON
+            if ($tabla === null) {
+                // Si la decodificación falla, manejar el error
+                return 'Error al decodificar el campo tabla.';
+            }
+        }
+
+        if ($idDispositivo != "" && $idDispositivo != null) {
+            $dis = DB::table('dispositivos')->where('id', $idDispositivo)->first();
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.distribucion_terreno', compact('canal', 'dispositivos', 'idDispositivo', 'datosPromedio', 'registro_canal','tabla'));
+        } else {
+            $dis = null;
+            $datosPromedio = DatosPromedio::where('data_id_canal', $id)->with('dispositivo')->get();
+            return view('vistas-canal.distribucion_terreno', compact('canal', 'dispositivos', 'url', 'dis', 'datosPromedio', 'registro_canal','tabla'));
+        }
+    }
 }

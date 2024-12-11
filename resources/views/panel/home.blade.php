@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
+    @include('panel.sidebar.sidebar')
     <div class="d-flex content-f">
-        @extends('panel.sidebar.sidebar')
         <div class="container-fluid mt-1">
             <div class="row">
                 <div class="col-md-12 mt-1">
@@ -17,18 +17,19 @@
                         <div class="row mt-2">
                             @foreach ($canales as $item)
                                 <div class="col-md-4">
-                                    <a class="card shadow-sm rounded-0"
-                                        href="/panel/mis-canales/canal/{{ $item->id }}"
+                                    <a class="card" href="/mis-canales/canal/{{ $item->id }}"
                                         style="background-color: #fff; text-decoration:none">
-                                        <div class="card-header rounded-0" style="background-color: #39A900; color: #fff; font-weight: 700"><i class="bi bi-bar-chart-steps"></i> {{$item->nombre_canal}}</div>
+                                        <div class="card-header rounded-0"
+                                            style="background-color: #39A900; color: #fff; font-weight: 700"><i
+                                                class="bi bi-bar-chart-steps"></i> {{ $item->nombre_canal }}</div>
                                         <div class="card-body">
                                             <ul>
-                                                <li>Nombre canal: <strong>{{$item->nombre_canal}}</strong></li>
+                                                <li>Nombre canal: <strong>{{ $item->nombre_canal }}</strong></li>
                                                 <li>Lugar: {{ $item->lugar }}</li>
-                                                <li>Acceso: {{ $item->tipo}}</li>
+                                                <li>Acceso: {{ $item->tipo }}</li>
                                             </ul>
                                             <div class="description">
-                                                <p>{{Str::limit($item->descripcion,100)}}</p>
+                                                <p>{{ Str::limit($item->descripcion, 100) }}</p>
                                             </div>
                                         </div>
                                     </a>

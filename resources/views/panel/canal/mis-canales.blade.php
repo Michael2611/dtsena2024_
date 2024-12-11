@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
+    @include('panel.sidebar.sidebar')
     <div class="d-flex content-f">
-        @extends('panel.sidebar.sidebar')
         <div class="container p-3 mt-2">
             <h1 class="fw-bold">Mis canales</h1>
             <div class="card border-0 shadow-sm">
@@ -17,17 +17,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=1?>
+                            <?php $i = 1; ?>
                             @foreach ($canales as $item)
                                 <tr>
-                                    <td>{{$i++}}</td>
-                                    <td>{{$item->nombre_canal}}</td>
-                                    <td>{{$item->lugar}}</td>
-                                    <td>{{$item->tipo}}</td>
+                                    <td>{{ $i++ }}</td>
+                                    <td>{{ $item->nombre_canal }}</td>
+                                    <td>{{ $item->lugar }}</td>
+                                    <td>{{ $item->tipo }}</td>
                                     <td>
                                         <div class="d-flex gap-2 justify-content-center align-items-center">
-                                            <a class="btn btn-primary" href="/panel/mis-canales/canal/{{$item->id}}">Ver</a>
-                                            <form action="/panel/canal/{{$item->id}}" method="post">
+                                            <a class="btn btn-primary"
+                                                href="/mis-canales/canal/{{ $item->id }}">Ver</a>
+                                            <form action="/canal/{{ $item->id }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger mt-3" type="submit">Eliminar</button>
